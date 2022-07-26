@@ -1,4 +1,6 @@
-import { provider } from "../firebase.config.js";
+import { useContext } from 'react'
+import { database, provider } from "../firebase.config.js";
+import { doc, setDoc } from "firebase/firestore";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -11,13 +13,10 @@ export function submitLogin(event, auth, data) {
   event.preventDefault();
   signInWithEmailAndPassword(auth, data.email, data.password)
     .then(userCredential => {
-      const user = userCredential.user;
-      console.log("Logged In!")
+      console.log(`Logged In: ${userCredential}`)
     })
     .catch(error => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(`Login Error: ${error.message}`)
+      console.log(`Signup Error: ${error.message}`);
     });
 }
 
@@ -25,13 +24,14 @@ export function submitSignup(event, auth, data) {
   event.preventDefault();
   createUserWithEmailAndPassword(auth, data.email, data.password)
     .then(userCredential => {
-      const user = userCredential.user;
-      console.log("Signed up!");
+      const uid = userCredential.user.uid
+      setDoc(doc(database, "users", uid), {
+        email: data.email,
+        uid: uid
+      });      
     })
     .catch(error => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(`Signup Error: ${errorMessage}`);
+      console.log(`Signup Error: ${error.message}`);
     });
 }
 
@@ -61,10 +61,9 @@ export function googleLogin(auth) {
 export function submitLogout(auth) {
   signOut(auth)
     .then(() => {
-      // Sign-out successful.
       console.log("Logged out")
     })
     .catch(error => {
-      // An error happened.
+      console.log(`Error: ${error.message}`)
     });
 }

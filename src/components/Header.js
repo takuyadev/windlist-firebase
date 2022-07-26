@@ -1,12 +1,16 @@
 import { Link } from 'react-router-dom'
+import { useContext } from 'react';
 import { PrimaryButton } from './Buttons'
 import { submitLogout } from '../modules/HandleUserForm'
 import { getAuth} from "firebase/auth";
-import { AuthState } from '../modules/AuthCheck';
 
 function Header(){
     const auth = getAuth();
-    AuthState(auth)
+    
+    function logOut(){
+        submitLogout(auth);
+    }
+
     return (
         <header className="sticky flex w-full p-4 justify-between border-b-2 border-b-gray-100 text-gray-500">
             <img className="w-16" src="./images/tailwind_logo.svg"/>
@@ -14,7 +18,7 @@ function Header(){
                 <Link to="/About">
                     About
                 </Link>
-                <PrimaryButton handleOnClick={()=>submitLogout(auth)}>
+                <PrimaryButton handleOnClick={logOut}>
                     Logout
                 </PrimaryButton>
             </nav>

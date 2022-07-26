@@ -2,25 +2,19 @@ import { useState } from "react";
 import { UilSignInAlt } from "@iconscout/react-unicons";
 import { PrimaryButton, SecondaryButton } from "../components/Buttons";
 import TextField from "../components/TextField";
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signInWithPopup,
-  onAuthStateChanged,
-  GoogleAuthProvider,
-  signOut
-} from "firebase/auth";
+import { getAuth } from "firebase/auth";
 
-import { AuthState } from "../modules/AuthCheck";
-import { submitLogin, submitSignup, googleLogin } from "../modules/HandleUserForm";
+import {
+  submitLogin,
+  submitSignup,
+  googleLogin
+} from "../modules/HandleUserForm";
 
 export default function UserForm({ setLoginData, loginData }) {
   const [tabs, setTabs] = useState("signup");
 
   const auth = getAuth();
-  AuthState(auth);
-  const GoogleLogo = <img src="./images/google_logo.svg"></img>
+  const GoogleLogo = <img src="./images/google_logo.svg"></img>;
 
   //Set State for form inputs
   function getEmailInput(e) {
@@ -46,9 +40,9 @@ export default function UserForm({ setLoginData, loginData }) {
     <form
       className="flex flex-col gap-6 "
       onSubmit={
-        tabs === "signup" ? 
-        (event) => submitSignup(event, auth, loginData) :
-        (event) => submitLogin(event, auth, loginData)
+        tabs === "signup"
+          ? event => submitSignup(event, auth, loginData)
+          : event => submitLogin(event, auth, loginData)
       }
     >
       <div className="flex flex-col place-items-center text-center">
@@ -80,16 +74,15 @@ export default function UserForm({ setLoginData, loginData }) {
       </PrimaryButton>
       <hr />
       <SecondaryButton
-        handleOnClick={()=>googleLogin(auth)}
+        handleOnClick={() => googleLogin(auth)}
         icon={GoogleLogo}
       >
         Sign in with Google
       </SecondaryButton>
       <p onClick={switchTabs} className="text-center cursor-pointer">
-        {tabs === "signup" ?
-          "Already have an account? Login." : 
-          "Already have an account? Signup."
-        }
+        {tabs === "signup"
+          ? "Already have an account? Login."
+          : "Already have an account? Signup."}
       </p>
     </form>
   );
