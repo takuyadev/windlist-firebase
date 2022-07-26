@@ -1,64 +1,66 @@
 import { useState } from "react";
-import Button from "../components/Button";
+import { UilSignInAlt } from "@iconscout/react-unicons";
+import { PrimaryButton, SecondaryButton } from "../components/Buttons";
 import TextField from "../components/TextField";
-import { database, provider } from '../firebase.config.js'
-import { collection, addDoc } from 'firebase/firestore'
-import {getAuth, signInWithPopup, GoogleAuthProvider} from 'firebase/auth'
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  onAuthStateChanged,
+  GoogleAuthProvider,
+  signOut
+} from "firebase/auth";
+
+import { AuthState } from "../modules/AuthCheck";
+import { submitLogin, submitSignup, googleLogin } from "../modules/HandleUserForm";
 
 export default function UserForm({ setLoginData, loginData }) {
-  const [tabs, setTabs] = useState("signup")
-  const auth = getAuth();
+  const [tabs, setTabs] = useState("signup");
 
+  const auth = getAuth();
+  AuthState(auth);
+  const GoogleLogo = <img src="./images/google_logo.svg"></img>
+
+  //Set State for form inputs
   function getEmailInput(e) {
-    setLoginData((prevInput) => ({
+    setLoginData(prevInput => ({
       ...prevInput,
-      email: e.target.value,
+      email: e.target.value
     }));
   }
 
   function getPasswordInput(e) {
-    setLoginData((prevInput) => ({
+    setLoginData(prevInput => ({
       ...prevInput,
-      password: e.target.value,
+      password: e.target.value
     }));
   }
 
-  async function submitSignup(e) {
-    e.preventDefault();
-
-    //Get user collection reference, then add object to collection
-    await addDoc(collection(database, "users"), {
-      email: loginData.email,
-      password: loginData.password
-    })
-  }
-
-  function googleLogin(){
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        // The signed-in user info.
-        const user = result.user;
-        // ...
-      }).catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
-      });
+  //Swap between Signup and Login Form
+  function switchTabs() {
+    setTabs(prevTab => (prevTab === "signup" ? "login" : "signup"));
   }
 
   return (
-    <form onSubmit={submitSignup} className="flex flex-col gap-6 ">
-      <div>
-        <h1 className="mb-2 text-2xl font-bold text-center ">Signup to WindList</h1>
-        <p className="text-center text-gray-500">Get started on one of the most original projects seen by developers.</p>
+    <form
+      className="flex flex-col gap-6 "
+      onSubmit={
+        tabs === "signup" ? 
+        (event) => submitSignup(event, auth, loginData) :
+        (event) => submitLogin(event, auth, loginData)
+      }
+    >
+      <div className="flex flex-col place-items-center text-center">
+        <UilSignInAlt className="mb-2" />
+        <h1 className="mb-2 text-2xl font-bold  ">
+          {tabs === "signup" ? "Signup to WindList" : "Login to WindList"}
+        </h1>
+        <p className="text-center text-gray-500">
+          {tabs === "signup"
+            ? "Get started on one of the most original projects seen by developers."
+            : "Welcome back to the best To-do list of all time."}
+        </p>
       </div>
       <TextField
         label="Email"
@@ -71,12 +73,24 @@ export default function UserForm({ setLoginData, loginData }) {
         handleOnChange={getPasswordInput}
         type="password"
         id="password"
-        placeholder="Enter email..."
+        placeholder="Enter password..."
       />
-      <Button type="submit">Submit</Button>
+      <PrimaryButton type="submit">
+        {tabs === "signup" ? "Signup" : "Login"}
+      </PrimaryButton>
       <hr />
-      <Button handleOnClick={googleLogin}>Sign in with Google</Button>
-      <p className="text-center"> Already have an account? Login. </p>
+      <SecondaryButton
+        handleOnClick={()=>googleLogin(auth)}
+        icon={GoogleLogo}
+      >
+        Sign in with Google
+      </SecondaryButton>
+      <p onClick={switchTabs} className="text-center cursor-pointer">
+        {tabs === "signup" ?
+          "Already have an account? Login." : 
+          "Already have an account? Signup."
+        }
+      </p>
     </form>
   );
 }

@@ -1,9 +1,9 @@
-import { useState } from 'react'
-import { Link, Route, Routes } from 'react-router-dom'
-import Header from './components/Header'
-import UserForm from './routes/UserForm'
-import TodoList from './routes/TodoList'
-import Footer from './components/Footer'
+import { useState } from "react";
+import { Link, Route, Routes } from "react-router-dom";
+import Header from "./components/Header";
+import UserForm from "./routes/UserForm";
+import TodoList from "./routes/TodoList";
+import Footer from "./components/Footer";
 
 function App() {
   const [loginData, setLoginData] = useState({
@@ -11,28 +11,18 @@ function App() {
     password: "",
   });
 
-  
-
   return (
     <div className="flex flex-col gap-6">
-      <Header/>
+      <Header />
       <main className="mx-12">
         <Routes>
-          <Route 
+          <Route
             path="/Login"
             element={
-              <UserForm 
-                setLoginData={setLoginData}
-                loginData={loginData}
-              />
+              <UserForm setLoginData={setLoginData} loginData={loginData} />
             }
           />
-          <Route 
-            path="/TodoList"
-            element={
-              <TodoList />
-            }
-          />
+          <Route path="/TodoList" element={<TodoList />} />
         </Routes>
       </main>
       <Footer></Footer>
