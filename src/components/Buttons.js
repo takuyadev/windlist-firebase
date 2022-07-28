@@ -1,8 +1,8 @@
-//Adjust any base classes by modifying this const variable
+// Adjust any base classes by modifying this const variable
 const baseButtonClass = "flex justify-center gap-2 ease-in duration-100 py-2 px-4 rounded-md text-white border-font-bold"
 
-//Primary Button
-export function PrimaryButton(
+// Primary Button
+function PrimaryButton(
   { children, width, handleOnClick, icon, type }) {
   return (
     <button
@@ -24,7 +24,7 @@ PrimaryButton.defaultProps = {
 
 
 // Secondary Button
-export function SecondaryButton(
+function SecondaryButton(
   { children, width, handleOnClick, icon, type }) {
   return (
     <button
@@ -45,3 +45,4 @@ SecondaryButton.defaultProps = {
 };
 
 
+export { PrimaryButton, SecondaryButton }

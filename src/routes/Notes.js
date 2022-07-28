@@ -1,11 +1,16 @@
+// Node Modules
 import { useEffect, useState } from 'react'
+import { database } from '../firebase.config';
+import { onSnapshot, collection } from "firebase/firestore";
+
+// Components
 import ListItem from "../components/ListItem";
 import TextField from "../components/TextField";
 import { PrimaryButton } from "../components/Buttons";
-import { uploadNote } from '../modules/HandleUserPost';
-import { database } from '../firebase.config';
-import { deleteNote } from '../modules/HandleUserPost';
-import { onSnapshot, collection, deleteDoc, doc } from "firebase/firestore";
+
+// Functions
+import { uploadNote } from '../modules/firebase/HandleUserPost';
+import { deleteNote } from '../modules/firebase/HandleUserPost';
 
 
 export default function TodoList(uid) {
@@ -19,7 +24,7 @@ export default function TodoList(uid) {
         setAllNotes(notesData)
       })
     }
-  }, [])
+  }, [uid])
   
   // Delete collection
   return (
