@@ -1,5 +1,5 @@
 // Node  Modules
-import { useState, useEffect } from "react";
+import { useState, useContext } from "react";
 import { Route, Routes } from "react-router-dom";
 import { getAuth } from 'firebase/auth'
 
@@ -16,6 +16,11 @@ import Footer from "./components/Footer";
 import { submitLogout } from './modules/firebase/HandleUserForm'
 import { onAuthStateChanged } from "firebase/auth";
 
+
+//Context
+import { IsLoggedInContext } from "./modules/context/IsLoggedInContext";
+
+
 // Authentication logger
 function App() {
   const auth = getAuth();
@@ -24,11 +29,19 @@ function App() {
     email: "",
     password: "",
   });
+  
+  const { setIsLoggedIn } = useContext(IsLoggedInContext)
 
   // Check for Firebase Authentication
   onAuthStateChanged(auth, user => {
-    if (user) setUserId(user.uid)
-    else setUserId("")
+    if (user) {
+      setUserId(user.uid)
+      setIsLoggedIn(true)
+    }
+    else {
+      setUserId("")
+      setIsLoggedIn(false)
+    }
   });
 
   return (
@@ -43,7 +56,7 @@ function App() {
           <Route path="/About" element={<About/>}/>
           <Route path="/Login" element={<Login auth={auth} loginData={loginData} setLoginData={setLoginData}/>}/>
           <Route path="/Signup" element={<Signup auth={auth} loginData={loginData} setLoginData={setLoginData}/>}/>
-          <Route path="/Notes" element={<Notes/>}/>
+          <Route path="/Notes" element={<Notes uid={userId}/>}/>
         </Routes>
       </main>
       <Footer></Footer>

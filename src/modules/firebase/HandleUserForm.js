@@ -11,7 +11,6 @@ import {
 // Form Submition functions for Login & Signup for Firebase
 // Then and catch can receive for data if needed, but simple app doesn't require larger functions
 export function submitLogin(event, auth, data) {
-  console.log(auth)
   event.preventDefault();
   signInWithEmailAndPassword(auth, data.email, data.password)
     .then(userCredential => console.log(`Logged In: ${userCredential}`))
@@ -37,8 +36,9 @@ export function googleLogin(auth) {
 }
 
 // Delete authentication status of Firebase
-export function submitLogout(auth) {
+export function submitLogout(auth, navigate) {
   signOut(auth)
     .then(() => console.log("Logged out"))
+    .then(() => navigate("/Login"))
     .catch(error => console.log(`Error: ${error.message}`));
 }
