@@ -10,14 +10,17 @@ import {
 
 // Form Submition functions for Login & Signup for Firebase
 // Then and catch can receive for data if needed, but simple app doesn't require larger functions
-export function submitLogin(event, auth, data) {
+export function submitLogin(event, auth, data, setError) {
   event.preventDefault();
   signInWithEmailAndPassword(auth, data.email, data.password)
     .then(userCredential => console.log(`Logged In: ${userCredential}`))
-    .catch(error => console.log(`Signup Error: ${error.message}`));
+    .catch(error => {
+      if(setError) setError(error.message)
+      console.log(`Signup Error: ${error.message}`)
+    });
 }
 
-export function submitSignup(event, auth, data) {
+export function submitSignup(event, auth, data, setError) {
   event.preventDefault();
   createUserWithEmailAndPassword(auth, data.email, data.password)
     .then(userCredential => {
@@ -27,16 +30,23 @@ export function submitSignup(event, auth, data) {
         uid: uid
       });
     })
-    .catch(error => console.log(`Signup Error: ${error.message}`));
+    .catch(error => {
+      if(setError) setError(error.message)
+      console.log(`Signup Error: ${error.message}`)
+    });
 }
 
 // Google Login Authentication Firebase
-export function googleLogin(auth) {
-  signInWithPopup(auth, provider).catch(error => alert(error));
+export function googleLogin(auth, setError) {
+  signInWithPopup(auth, provider)    
+  .catch(error => {
+    if(setError) setError(error.message)
+    console.log(`Signup Error: ${error.message}`)
+  });
 }
 
 // Delete authentication status of Firebase
-export function submitLogout(auth, navigate) {
+export function submitLogout(auth, navigate, setError) {
   signOut(auth)
     .then(() => console.log("Logged out"))
     .then(() => navigate("/Login"))

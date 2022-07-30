@@ -1,6 +1,14 @@
-import { motion } from 'framer-motion'
+// Node Modules
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { UilTrashAlt } from "@iconscout/react-unicons";
+import { UilEdit } from "@iconscout/react-unicons";
 
-function ListItem({ data, handleDelete }) {
+//Components'
+import NoteUpdateModal from "./NoteUpdateForm";
+
+function ListItem({ data, handleDelete, handleEdit }) {
+  const [showEdit, setShowEdit] = useState(false);
 
   const listAnimation = {
     hidden: {
@@ -17,19 +25,40 @@ function ListItem({ data, handleDelete }) {
         duration: 0.5
       }
     }
-  }
+  };
 
   return (
-      <motion.li 
-        variants={listAnimation}
-        initial="hidden"
-        animate="visible"
-        show="visible"
-        exit="hidden"
-        className="flex justify-between p-4 font-bold rounded-lg border-2 border-gray-200 cursor-pointer">
-        <p>{data.note}</p>
-        <p onClick={handleDelete}>delete</p>
-      </motion.li>
+    <motion.li
+      variants={listAnimation}
+      initial="hidden"
+      animate="visible"
+      show="visible"
+      exit="hidden"
+      className="relative flex justify-between py-6 px-4 font-bold rounded-lg border-2 border-gray-200"
+    >
+      <p className="overflow-y-auto">{data.note}</p>
+      <div className="flex gap-4">
+        <UilEdit
+          className="text-gray-500 hover:text-gray-900 duration-300 cursor-pointer"
+          onClick={() => {
+            setShowEdit(prevValue => !prevValue);
+          }}
+        ></UilEdit>
+        <UilTrashAlt
+          className="text-gray-500 hover:text-gray-900 duration-300 cursor-pointer"
+          onClick={handleDelete}
+        ></UilTrashAlt>
+        <AnimatePresence>
+          {showEdit && (
+            <NoteUpdateModal
+              id={data.id}
+              handleEdit={handleEdit}
+              setShowEdit={setShowEdit}
+            />
+          )}
+        </AnimatePresence>
+      </div>
+    </motion.li>
   );
 }
 

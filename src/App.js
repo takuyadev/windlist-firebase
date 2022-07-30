@@ -19,6 +19,7 @@ import { onAuthStateChanged } from "firebase/auth";
 
 //Context
 import { IsLoggedInContext } from "./modules/context/IsLoggedInContext";
+import { AnimatePresence } from "framer-motion";
 
 
 // Authentication logger
@@ -50,14 +51,16 @@ function App() {
         auth={auth}
         handleLogOut={()=>submitLogout(auth)}
       />
-      <main className="mx-12">
-        <Routes>
-          <Route path="/" element={<Home/>}/>
-          <Route path="/About" element={<About/>}/>
-          <Route path="/Login" element={<Login auth={auth} loginData={loginData} setLoginData={setLoginData}/>}/>
-          <Route path="/Signup" element={<Signup auth={auth} loginData={loginData} setLoginData={setLoginData}/>}/>
-          <Route path="/Notes" element={<Notes uid={userId}/>}/>
-        </Routes>
+      <main className="flex flex-col gap-4 mx-8 md:mx-16 lg:mx-48">
+        <AnimatePresence>
+          <Routes>
+            <Route path="/" element={<Home/>}/>
+            <Route path="/About" element={<About/>}/>
+            <Route path="/Login" element={<Login auth={auth} loginData={loginData} setLoginData={setLoginData}/>}/>
+            <Route path="/Signup" element={<Signup auth={auth} loginData={loginData} setLoginData={setLoginData}/>}/>
+            <Route path="/Notes" element={<Notes uid={userId}/>}/>
+          </Routes>
+        </AnimatePresence>
       </main>
       <Footer></Footer>
     </div>
