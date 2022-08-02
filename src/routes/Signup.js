@@ -48,7 +48,7 @@ function Signup({ auth }) {
       <h1 className="text-2xl text-center font-bold">Signup</h1>
       <Link to="/Login">
         <p className="mt-4 text-center text-red-500 font-bold hover:text-red-300 ease-out duration-200">
-          Already registered? Signup instead.
+          Already registered? Login here instead.
         </p>
       </Link>
       <UserForm
