@@ -6,7 +6,9 @@ CRUD Project created using Firebase and TailWindCSS to create an to-do list with
 
 ### `Languages`
 
-React, TailWindCSS, Firebase
+- React.js
+- Firebase
+- TailWindCSS
 
 ### `Resources`
 
