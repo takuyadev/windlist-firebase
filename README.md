@@ -9,6 +9,7 @@ CRUD Project created using Firebase and TailWindCSS to create an to-do list with
 - React.js
 - Firebase
 - TailWindCSS
+- Framer Motion
 
 ### `Resources`
 
