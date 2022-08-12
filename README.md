@@ -1,7 +1,12 @@
 # Windlist Firebase Project
 
-- Simple To-do list project app where you can either authenticate by Google login or email / password login
-- Use TailwindCSS for building components and pages
+### `Summary`
+
+CRUD Project created using Firebase and TailWindCSS to create an to-do list with authentication, allowing users to add, edit, modify and delete notes off the database.
+
+### `Languages`
+
+React, TailWindCSS, Firebase
 
 ### `Resources`
 
